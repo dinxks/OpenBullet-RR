@@ -1,0 +1,133 @@
+﻿<UserControl x:Class="OpenBullet2.Native.Controls.StringSettingViewer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:OpenBullet2.Native.Controls"
+             xmlns:converters="clr-namespace:OpenBullet2.Native.Converters"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             mc:Ignorable="d" 
+             d:DesignHeight="60" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <converters:BoolToTextWrappingConverter x:Key="BoolToWrap" />
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+
+        <Label
+            Content="{Binding Name}"
+            ToolTip="{Binding Description}"
+            VerticalAlignment="Center"
+            Grid.Column="0" />
+
+        <TabControl x:Name="tabControl" Grid.Column="1">
+            <TabControl.ItemContainerStyle>
+                <Style TargetType="{x:Type TabItem}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </Style>
+            </TabControl.ItemContainerStyle>
+            <TabItem>
+                <ComboBox 
+                    IsEditable="True"
+                    ItemsSource="{Binding Suggestions}"
+                    Background="#112"
+                    Height="30"
+                    Text="{Binding VariableName, UpdateSourceTrigger=PropertyChanged}" />
+            </TabItem>
+            <TabItem>
+                <TextBox 
+                    AcceptsReturn="{Binding MultiLine}"
+                    Background="#111"
+                    Height="{Binding Height}"
+                    VerticalContentAlignment="{Binding VerticalAlignment}"
+                    TextWrapping="{Binding MultiLine, Converter={StaticResource ResourceKey=BoolToWrap}}"
+                    Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
+            </TabItem>
+            <TabItem>
+                <TextBox 
+                    AcceptsReturn="{Binding MultiLine}"
+                    Background="#121"
+                    Height="{Binding Height}"
+                    VerticalContentAlignment="{Binding VerticalAlignment}"
+                    TextWrapping="{Binding MultiLine, Converter={StaticResource ResourceKey=BoolToWrap}}"
+                    Text="{Binding InterpValue, UpdateSourceTrigger=PropertyChanged}" />
+            </TabItem>
+        </TabControl>
+
+        <TabControl x:Name="buttonTabControl" Grid.Column="2">
+            <TabControl.ItemContainerStyle>
+                <Style TargetType="{x:Type TabItem}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </Style>
+            </TabControl.ItemContainerStyle>
+            <TabItem>
+                <!-- Variable -> Constant -->
+                <Button Click="ConstantMode"
+                     Width="30"
+                     Height="30"
+                     ToolTip="Switch to constant mode"
+                     Style="{StaticResource StyledPrimaryButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontSize="9">VAR</TextBlock>
+                    </StackPanel>
+                </Button>
+            </TabItem>
+            <TabItem>
+                <!-- Constant -> Interpolated -->
+                <Button Click="InterpMode"
+                     Width="30"
+                     Height="30"
+                     ToolTip="Switch to interpolated mode"
+                     Style="{StaticResource StyledPrimaryButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconModern Kind="TextSerif" Width="15" Height="15" />
+                    </StackPanel>
+                </Button>
+            </TabItem>
+            <TabItem>
+                <!-- Interpolated -> Variable -->
+                <Button Click="VariableMode"
+                     Width="30"
+                     Height="30"
+                     ToolTip="Switch to variable mode"
+                     Style="{StaticResource StyledPrimaryButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconEntypo Kind="Code" Width="15" Height="15"/>
+                    </StackPanel>
+                </Button>
+            </TabItem>
+        </TabControl>
+
+        <StackPanel
+            Visibility="{Binding CanSwitchToInterpolatedMode, Converter={StaticResource ResourceKey=BoolToVis}}"
+            Grid.Row="1"
+            Grid.Column="1"
+            Grid.ColumnSpan="2"
+            Margin="0 0 0 5"
+            Orientation="Horizontal">
+            <TextBlock>
+                This setting contains the '&lt;' and '&gt;' characters, do you want to&#160;
+            </TextBlock>
+            <TextBlock
+                Cursor="Hand"
+                TextDecorations="Underline"
+                MouseDown="SwitchToInterpolatedMode"
+                Foreground="{DynamicResource ForegroundCustom}">
+                switch to interpolated mode?
+            </TextBlock>
+        </StackPanel>
+        
+    </Grid>
+</UserControl>
